@@ -2623,15 +2623,18 @@ class PlayState extends MusicBeatState
 
 	function openChartEditor()
 	{
-		persistentUpdate = false;
-		paused = true;
-		cancelMusicFadeTween();
-		MusicBeatState.switchState(new ChartingState());
-		chartingMode = true;
+		var ret:Dynamic = callOnLuas('onOpeningChartEditor', []);
+		if(ret != FunkinLua.Function_Stop) {
+			persistentUpdate = false;
+			paused = true;
+			cancelMusicFadeTween();
+			MusicBeatState.switchState(new ChartingState());
+			chartingMode = true;
 
-		#if desktop
-		DiscordClient.changePresence("Chart Editor", null, null, true);
-		#end
+			#if desktop
+			DiscordClient.changePresence("Chart Editor", null, null, true);
+			#end
+		}
 	}
 
 	public var isDead:Bool = false; //Don't mess with this on Lua!!!

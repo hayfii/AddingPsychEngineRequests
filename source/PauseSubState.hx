@@ -14,6 +14,7 @@ import flixel.tweens.FlxTween;
 import flixel.util.FlxColor;
 import flixel.FlxCamera;
 import flixel.util.FlxStringUtil;
+import FunkinLua;
 
 class PauseSubState extends MusicBeatSubstate
 {
@@ -225,19 +226,22 @@ class PauseSubState extends MusicBeatSubstate
 					restartSong();
 					PlayState.chartingMode = false;
 				case 'Skip Time':
-					if(curTime < Conductor.songPosition)
-					{
-						PlayState.startOnTime = curTime;
-						restartSong(true);
-					}
-					else
-					{
-						if (curTime != Conductor.songPosition)
-						{
-							PlayState.instance.clearNotesBefore(curTime);
-							PlayState.instance.setSongTime(curTime);
-						}
-						close();
+					var ret:Dynamic = PlayState.callOnLuas('onSkipTime', [time]);
+					if(ret != FunkinLua.Function_Stop) {
+						if(curTime < Conductor.songPosition)
+							{
+								PlayState.startOnTime = curTime;
+								restartSong(true);
+							}
+							else
+							{
+								if (curTime != Conductor.songPosition)
+								{
+									PlayState.instance.clearNotesBefore(curTime);
+									PlayState.instance.setSongTime(curTime);
+								}
+								close();
+							}
 					}
 				case "End Song":
 					close();
