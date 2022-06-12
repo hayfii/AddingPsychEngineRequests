@@ -420,6 +420,7 @@ class PlayState extends MusicBeatState
 		dadGroup = new FlxSpriteGroup(DAD_X, DAD_Y);
 		gfGroup = new FlxSpriteGroup(GF_X, GF_Y);
 
+		callOnLuas('onStageLoad', [curStage]);
 		switch (curStage)
 		{
 			case 'stage': //Week 1
@@ -692,6 +693,7 @@ class PlayState extends MusicBeatState
 					add(bg);
 				}
 		}
+	        callOnLuas('onStageLoaded', [curStage]);
 
 		if(isPixelStage) {
 			introSoundsSuffix = '-pixel';
