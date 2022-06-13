@@ -226,7 +226,7 @@ class PauseSubState extends MusicBeatSubstate
 					restartSong();
 					PlayState.chartingMode = false;
 				case 'Skip Time':
-					var ret:Dynamic = PlayState.instance.callOnLuas('onSkipTime', [time]);
+					var ret:Dynamic = PlayState.instance.callOnLuas('onSkipTime', [curTime, Conductor.songPosition, holdTime]);
 					if(ret != FunkinLua.Function_Stop) {
 						if(curTime < Conductor.songPosition)
 							{
