@@ -350,6 +350,7 @@ class PlayState extends MusicBeatState
 		var songName:String = Paths.formatToSongPath(SONG.song);
 
 		curStage = PlayState.SONG.stage;
+		var stageData:StageFile = StageData.getStageFile(curStage);
 
 		var ret:Dynamic = callOnLuas('onStagePreload', [curStage]);
 		if (ret != FunkinLua.Function_Stop) {
@@ -375,8 +376,6 @@ class PlayState extends MusicBeatState
 						curStage = 'stage';
 				}
 			}
-
-			var stageData:StageFile = StageData.getStageFile(curStage);
 			if(stageData == null) { //Stage couldn't be found, create a dummy stage for preventing a crash
 				stageData = {
 					directory: "",
