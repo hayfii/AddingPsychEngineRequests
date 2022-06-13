@@ -350,46 +350,50 @@ class PlayState extends MusicBeatState
 		var songName:String = Paths.formatToSongPath(SONG.song);
 
 		curStage = PlayState.SONG.stage;
-		//trace('stage is: ' + curStage);
-		if(PlayState.SONG.stage == null || PlayState.SONG.stage.length < 1) {
-			switch (songName)
-			{
-				case 'spookeez' | 'south' | 'monster':
-					curStage = 'spooky';
-				case 'pico' | 'blammed' | 'philly' | 'philly-nice':
-					curStage = 'philly';
-				case 'milf' | 'satin-panties' | 'high':
-					curStage = 'limo';
-				case 'cocoa' | 'eggnog':
-					curStage = 'mall';
-				case 'winter-horrorland':
-					curStage = 'mallEvil';
-				case 'senpai' | 'roses':
-					curStage = 'school';
-				case 'thorns':
-					curStage = 'schoolEvil';
-				default:
-					curStage = 'stage';
-			}
-		}
 
-		var stageData:StageFile = StageData.getStageFile(curStage);
-		if(stageData == null) { //Stage couldn't be found, create a dummy stage for preventing a crash
-			stageData = {
-				directory: "",
-				defaultZoom: 0.9,
-				isPixelStage: false,
-			
-				boyfriend: [770, 100],
-				girlfriend: [400, 130],
-				opponent: [100, 100],
-				hide_girlfriend: false,
-			
-				camera_boyfriend: [0, 0],
-				camera_opponent: [0, 0],
-				camera_girlfriend: [0, 0],
-				camera_speed: 1
-			};
+		var ret:Dynamic = callOnLuas('onStagePreload', [curStage]);
+		if (ret != FunkinLua.Function_Stop) {
+			 //trace('stage is: ' + curStage);
+			if(PlayState.SONG.stage == null || PlayState.SONG.stage.length < 1) {
+				switch (songName)
+				{
+					case 'spookeez' | 'south' | 'monster':
+						curStage = 'spooky';
+					case 'pico' | 'blammed' | 'philly' | 'philly-nice':
+						curStage = 'philly';
+					case 'milf' | 'satin-panties' | 'high':
+						curStage = 'limo';
+					case 'cocoa' | 'eggnog':
+						curStage = 'mall';
+					case 'winter-horrorland':
+						curStage = 'mallEvil';
+					case 'senpai' | 'roses':
+						curStage = 'school';
+					case 'thorns':
+						curStage = 'schoolEvil';
+					default:
+						curStage = 'stage';
+				}
+			}
+
+			var stageData:StageFile = StageData.getStageFile(curStage);
+			if(stageData == null) { //Stage couldn't be found, create a dummy stage for preventing a crash
+				stageData = {
+					directory: "",
+					defaultZoom: 0.9,
+					isPixelStage: false,
+				
+					boyfriend: [770, 100],
+					girlfriend: [400, 130],
+					opponent: [100, 100],
+					hide_girlfriend: false,
+				
+					camera_boyfriend: [0, 0],
+					camera_opponent: [0, 0],
+					camera_girlfriend: [0, 0],
+					camera_speed: 1
+				};
+			}
 		}
 
 		defaultCamZoom = stageData.defaultZoom;
@@ -935,7 +939,10 @@ class PlayState extends MusicBeatState
 
 		// startCountdown();
 
-		generateSong(SONG.song);
+		var ret:Dynamic = callOnLuas('onGenerateSong', [SONG.song]);
+		if  (ret != FunkinLua.Function_Stop) {
+			generateSong(SONG.song);
+		}
 		#if LUA_ALLOWED
 		for (notetype in noteTypeMap.keys())
 		{
